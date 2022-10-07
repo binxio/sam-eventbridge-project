@@ -1,0 +1,38 @@
+AWSTemplateFormatVersion: 2010-09-09
+Transform: AWS::Serverless-2016-10-31
+Description: >-
+  {{cookiecutter.description}}
+
+Globals:
+  Function:
+    Timeout: 10
+    AutoPublishAlias: live
+    Environment:
+      Variables:
+        POWERTOOLS_SERVICE_NAME: {{cookiecutter.project_name}}
+        LOG_LEVEL: INFO
+
+Resources:
+
+  CloudFormationStacksFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: src/cloudformation_stacks
+      Handler: function.handler
+      Runtime: python3.9
+      Architectures: [ arm64 ]
+      Events:
+        EventRule:
+          Type: EventBridgeRule
+          Properties:
+            Pattern:
+              source: ["aws.cloudformation"]
+              detail:
+                resource-type:
+                  - exists: false # When there is no resource-type we assume it is an stack operation
+
+  CloudFormationStacksFunctionLogs:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub /aws/lambda/${CloudFormationStacksFunction}
+      RetentionInDays: 7

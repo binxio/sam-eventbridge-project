@@ -1,0 +1,19 @@
+{
+    "version": "0",
+    "id": "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXA",
+    "detail-type": "CloudFormation Stack Status Change",
+    "source": "aws.cloudformation",
+    "account": "000000000000",
+    "time": "2022-10-07T09:03:34Z",
+    "region": "eu-west-1",
+    "resources": [
+        "arn:aws:cloudformation:eu-west-1:000000000000:stack/my-sample-stack/XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXB"
+    ],
+    "detail": {
+        "stack-id": "arn:aws:cloudformation:eu-west-1:000000000000:stack/my-sample-stack/XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXB",
+        "status-details": {
+            "status": "DELETE_IN_PROGRESS",
+            "status-reason": "User Initiated"
+        }
+    }
+}
