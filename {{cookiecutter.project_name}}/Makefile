@@ -20,7 +20,9 @@ pyproject.toml:
 		--dependency aws-lambda-powertools[pydantic] \
 		--dev-dependency pytest \
 		--dev-dependency pytest-cov \
-		--dev-dependency mypy
+		--dev-dependency mypy \
+		--dev-dependency xenon \
+		--dev-dependency radon
 	sed -i '' 's/$(shell echo "{{cookiecutter.project_name}}" | tr "-" _)/src/g' pyproject.toml
 
 .git:
@@ -34,11 +36,18 @@ install: pyproject.toml .git ## Install all dependencies
 .aws-sam/build/template.yaml: build
 
 .PHONY: test
-test: ## Run the tests defined in the project
+test: _complexity-baseline ## Run the tests defined in the project
 	pytest --cov
 
 .PHONY: lint
 lint: _black _mypy ## Lint all code
+
+.PHONY: _complexity-baseline
+_complexity-baseline:
+	$(info Maintenability index)
+	radon mi --min A --max A --show --sort src
+	$(info Cyclomatic complexity index)
+	xenon --max-absolute A --max-modules A --max-average A src
 
 .PHONY: _black
 _black:
